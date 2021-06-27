@@ -1,10 +1,13 @@
 import { RouterPage } from './pages/RouterPage'
 import { IUContextProvider } from './context/IUContext'
+import { SocketProvider } from './context/SocketContext'
 
 export const TicketApp = () => {
   return (
-    <IUContextProvider>
-      <RouterPage />
-    </IUContextProvider>
+    <SocketProvider>
+      <IUContextProvider>
+        <RouterPage />
+      </IUContextProvider>
+    </SocketProvider>
   )
 }
