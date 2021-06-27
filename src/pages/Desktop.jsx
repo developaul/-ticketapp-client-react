@@ -22,8 +22,12 @@ export const Desktop = () => {
           <Text type="success" >5</Text>
         </Col>
         <Col span={4} align="right">
-          <Button shape="round" type="danger" onClick={_handleLeave} >
-            <CloseCircleOutlined />
+          <Button
+            shape="round"
+            type="danger"
+            onClick={_handleLeave}
+            icon={<CloseCircleOutlined />}
+          >
             Salir
           </Button>
         </Col>
@@ -46,8 +50,8 @@ export const Desktop = () => {
             onClick={_handleNext}
             shape="round"
             type="primary"
+            icon={<RightOutlined />}
           >
-            <RightOutlined />
             Siguiente
           </Button>
         </Col>
