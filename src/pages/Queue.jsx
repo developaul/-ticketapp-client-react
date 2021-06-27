@@ -11,6 +11,7 @@ import {
 import { SocketContext } from '../context/SocketContext';
 
 import { useHideMenu } from '../hooks/useHideMenu';
+import { getLastThirteen } from '../helpers/getLastThirteen';
 
 const { Title, Text } = Typography
 
@@ -24,6 +25,10 @@ export const Queue = () => {
     socket.on('assigned-ticket', (assigendTickets) => setTickets(assigendTickets))
     return () => socket.off('assigned-ticket')
   }, [socket])
+
+  useEffect(() => {
+    getLastThirteen().then(setTickets)
+  }, [])
 
   return (
     <>
