@@ -1,17 +1,21 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { Redirect, useHistory } from 'react-router-dom'
 import { Button, Col, Divider, Row, Typography } from 'antd'
 import { CloseCircleOutlined, RightOutlined } from '@ant-design/icons'
 
 import { getUserStorage } from '../helpers/getUserStorage'
 import { useHideMenu } from '../hooks/useHideMenu'
+import { SocketContext } from '../context/SocketContext'
 
 const { Title, Text } = Typography
 
 export const Desktop = () => {
+  useHideMenu(true)
+
+  const [currentTicket, setCurrentTicket] = useState(null)
+  const { socket } = useContext(SocketContext)
   const [user] = useState(getUserStorage())
   const history = useHistory()
-  useHideMenu(true)
 
   const _handleLeave = useCallback(() => {
     localStorage.clear()
@@ -19,8 +23,10 @@ export const Desktop = () => {
   }, [history])
 
   const _handleNext = useCallback(() => {
-    console.log('next');
-  }, [])
+    socket.emit('assign-ticket', user, ticket => {
+      setCurrentTicket(ticket)
+    })
+  }, [socket, user])
 
   if (!user?.agent || !user?.desktop) return <Redirect to="/signin" />
 
@@ -44,17 +50,19 @@ export const Desktop = () => {
         </Col>
       </Row>
       <Divider />
-      <Row>
-        <Col>
-          <Text>Está atendiendo el ticket número: </Text>
-          <Text
-            style={{ fontSize: 30 }}
-            type="danger"
-          >
-            55
-          </Text>
-        </Col>
-      </Row>
+      {currentTicket &&
+        <Row>
+          <Col>
+            <Text>Está atendiendo el ticket número: </Text>
+            <Text
+              style={{ fontSize: 30 }}
+              type="danger"
+            >
+              {currentTicket.number}
+            </Text>
+          </Col>
+        </Row>
+      }
       <Row>
         <Col offset={18} span={6} align="right">
           <Button
