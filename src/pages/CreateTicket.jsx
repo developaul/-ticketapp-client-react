@@ -1,14 +1,18 @@
+import { useCallback } from 'react'
 import { DownloadOutlined } from '@ant-design/icons'
 import { Button, Col, Row, Typography } from 'antd'
-import React from 'react'
+
+import { useHideMenu } from '../hooks/useHideMenu'
 
 const { Title, Text } = Typography
 
 export const CreateTicket = () => {
 
-  const _generateNewTicket = () => {
+  useHideMenu(true)
 
-  }
+  const _handleGenerateNewTicket = useCallback(() => {
+
+  }, [])
 
   return (
     <>
@@ -20,7 +24,7 @@ export const CreateTicket = () => {
             shape="round"
             icon={<DownloadOutlined />}
             size="large"
-            onClick={_generateNewTicket}
+            onClick={_handleGenerateNewTicket}
           >
             Nuevo Ticket
           </Button>

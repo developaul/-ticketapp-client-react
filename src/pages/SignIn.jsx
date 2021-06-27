@@ -1,6 +1,6 @@
 
-import { useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useCallback, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
 import { SaveOutlined } from '@ant-design/icons';
 import {
   Form,
@@ -10,21 +10,29 @@ import {
   Typography,
   Divider
 } from 'antd';
+import { useHideMenu } from '../hooks/useHideMenu';
+import { getUserStorage } from '../helpers/getUserStorage';
 
 const { Title, Text } = Typography
 
 export const SignIn = () => {
+
+  useHideMenu(false)
+  const [user] = useState(getUserStorage())
+
   const history = useHistory()
 
-  const onFinish = useCallback((values) => {
-    console.log('Success:', values);
-
+  const onFinish = useCallback(({ agent, desktop }) => {
+    localStorage.setItem('agent', agent)
+    localStorage.setItem('desktop', desktop)
     history.push('/desktop')
   }, [history]);
 
   const onFinishFailed = useCallback((errorInfo) => {
     console.log('Failed:', errorInfo);
   }, []);
+
+  if (user?.agent && user?.desktop) return <Redirect to="/desktop" />
 
   return (
     <>

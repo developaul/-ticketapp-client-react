@@ -1,25 +1,36 @@
-import { CloseCircleOutlined, RightOutlined } from '@ant-design/icons'
+import { useCallback, useState } from 'react'
+import { Redirect, useHistory } from 'react-router-dom'
 import { Button, Col, Divider, Row, Typography } from 'antd'
-import { useCallback } from 'react'
+import { CloseCircleOutlined, RightOutlined } from '@ant-design/icons'
+
+import { getUserStorage } from '../helpers/getUserStorage'
+import { useHideMenu } from '../hooks/useHideMenu'
 
 const { Title, Text } = Typography
 
 export const Desktop = () => {
+  const [user] = useState(getUserStorage())
+  const history = useHistory()
+  useHideMenu(true)
+
   const _handleLeave = useCallback(() => {
-    console.log('leave');
-  }, [])
+    localStorage.clear()
+    history.replace('/signin')
+  }, [history])
 
   const _handleNext = useCallback(() => {
     console.log('next');
   }, [])
 
+  if (!user?.agent || !user?.desktop) return <Redirect to="/signin" />
+
   return (
     <>
       <Row>
         <Col span={20}>
-          <Title level={2}>Paul</Title>
+          <Title level={2}>{user.agent}</Title>
           <Text>Usted esta trabajando en el escritorio: </Text>
-          <Text type="success" >5</Text>
+          <Text type="success" >{user.desktop}</Text>
         </Col>
         <Col span={4} align="right">
           <Button
@@ -35,7 +46,7 @@ export const Desktop = () => {
       <Divider />
       <Row>
         <Col>
-          <Text>Está atentiendo el ticket número: </Text>
+          <Text>Está atendiendo el ticket número: </Text>
           <Text
             style={{ fontSize: 30 }}
             type="danger"
