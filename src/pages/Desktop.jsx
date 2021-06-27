@@ -23,9 +23,7 @@ export const Desktop = () => {
   }, [history])
 
   const _handleNext = useCallback(() => {
-    socket.emit('assign-ticket', user, ticket => {
-      setCurrentTicket(ticket)
-    })
+    socket.emit('assign-ticket', user, ticket => setCurrentTicket(ticket))
   }, [socket, user])
 
   if (!user?.agent || !user?.desktop) return <Redirect to="/signin" />
